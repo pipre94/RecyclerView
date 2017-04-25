@@ -6,12 +6,16 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jonmid.tallerasynctask.Adapters.PostAdapters;
 import com.jonmid.tallerasynctask.Models.Post;
 import com.jonmid.tallerasynctask.Parser.Json;
 
@@ -24,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     Button boton;
     TextView texto;
     List<Post> myPost;
+    RecyclerView recyclerView;
+    PostAdapters  adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         cargador = (ProgressBar) findViewById(R.id.cargador);
         boton = (Button) findViewById(R.id.boton);
         texto = (TextView) findViewById(R.id.texto);
+        recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
     }
 
     public Boolean isOnLine(){
@@ -56,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cargarDatos(){
-        // texto.append("JSON cargado correctamente.");
-        if (myPost != null){
-            for (Post post:myPost){
-                texto.append(post.getTitle() + "\n");
-            }
-        }
+
+        //iyectar el item en my RecyclerView
+
+        adapter = new PostAdapters(getApplicationContext(),myPost);
+        recyclerView.setAdapter(adapter);
     }
 
     private class MyTask extends AsyncTask<String, String, String>{
